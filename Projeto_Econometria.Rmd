@@ -1,0 +1,69 @@
+---
+title: <center>Abordagem ARIMA para Predição de Séries Temporais em Ações da Bolsa
+  de Valores Brasileira
+output:
+  html_document:
+    df_print: paged
+  pdf_document: default
+---
+
+<center>Ana P. S. Gularte;$^1$;$^2$, Danusio G. G. Filho1;$^1$;$^2$, Thiago C. N. Silva;$^1$
+<br>$^1$Instituto Tecnológico de Aeronáutica (ITA)
+<br>São José dos Campos – SP – Brasil
+<br>$^2$Universidade Federal de São Paulo (UNIFESP)
+<br>São José dos Campos – SP – Brasil
+<br>gularte@ita.br,danusio.gadelhafilho@gmail.com, thg.cns@gmail.com
+</center>
+
+<div style="text-align: justify">
+# 1. Introdução<br>
+<br>O desenvolvimento financeiro, mais especificamente o mercado acionário, desempenha um papel fundamental nas organizações social e econômica da sociedade ao propiciar a captação de recursos, pois permite a alocação de capital em investimentos produtivos, gera emprego e renda e oportuniza o crescimento econômico. Adicionalmente diminui o custo das mobilizações de poupança, facilita o investimento em tecnologia mais produtiva e permite às empresas o acesso permanente ao capital levantado por meio da emissão de ações [Chakraborty & Ray 2006], [Lin et al. 2012], [Naik & Padhi 2015]. Na mesma linha, a democratização do acesso ao mercado de ações, proporcionou acessibilidade para qualquer pessoa que queira investir, aliada a tecnologia que fornece serviços amplamente disponíveis através dos portais de finanças. Dessa forma, a análise de movimentos que influenciam o setor tem sido amplamente estudada por acadêmicos e executivos, especialmente nas economias atualmente globalizadas e integradas o que faz com que as previsões de séries temporais sejam uma das tarefas mais desafiadoras nos mercados financeiros [Lin et al. 2012]. <br>
+<div style="text-indent: 2em;">Formalmente uma série temporal é um conjunto de acontecimentos e sua consequência dinâmica do relacionamento entre as variáveis, ordenadas ao longo do tempo [Hamilton 1994], [Morettin 2017]. Descobrir o caminho dinâmico de uma série temporal, quantificando a incerteza, é um passo necessário em qualquer projeto empírico e permite previsões melhores devido a componente previsível da série que pode ser extrapolada para o futuro, em tais circunstâncias, eventos futuros antecipados têm consequências para o período atual a fim de fornecer sistemas de suporte a tomada de melhores decisões [Angrist & Pischke 2015], [Enders 1948].<br>
+<div style="text-indent: 2em;">A econometria é vocacionada para analisar dados financeiros e desenvolveu ao longo dos anos vários métodos relevantes em todos os ramos da economia aplicada, que atrai muitos estudos de diferentes áreas. Avanços em série temporal é comumente encontrada na frequência de vendas de um produto, consumo de energia elétrica, estudos climáticos, cotação do preço de uma ação na bolsa de valores, evolução da área plantada das commodities, estudos epidemiológicos, controle de estoque e produção, controle e otimização de processos industriais, cada qual com sua frequência e assim por diante[Box  & Jenkins 1976], [Diebold 1998], [Wooldrige 2019]. Dentre os métodos desenvolvidos, estão os modelos ARIMA (autoregressive integrated moving averange) e as várias extensões (AR, MA, ARMA, SARIMA, entre outros) propostas por Box & Jenkins (1976) são frequentemente empregados nesses estudos, devido as propriedades dos modelos em aprender padrões a partir dos dados históricos e robustez na previsão de séries temporais.<br>
+<div style="text-indent: 2em;">Em geral, o valor de retorno das ações é considerado série estocástica estacionária, caracterizada quando a média e a variância não oscilam sistematicamente ao longo do tempo, e a covariância entre dois valores da série depende apenas da distância no tempo que separa os dois valores, e não dos tempos reais em que as variáveis são observadas [Bueno 2018], [Morettin 2017], [Gujarati & Porter 2011]. Para o propósito de predição essa característica é fundamental, caso contrário, uma série não estacionária possui pouco valor prático, tendo em vista que seu processo é puramente aleatório.<br>
+<div style="text-indent: 2em;">Com base em um teste de raiz unitária de Dickey & Fuller (1979) é possível distinguir a série temporal como de tendência estocástica ou de tendência determinística, cujo resultado rejeita a hipótese nula e conclui-se que a série não possui raízes unitárias, aceitando a hipótese alternativa de que a série dessa pesquisa é estacionária por diferenciação. No entanto, prever os preços dos ativos financeiros é uma difícil tarefa, pois geralmente são não lineares, dinâmicos e caóticos [Cavalcante et al. 2016], [Lin et al. 2012]. Pesquisas recentes [Tsay 2014], [Chen 2021], [Linton 2021] mostram que as séries temporais multivariadas fazem parte de uma área na análise de séries temporais que tem sido extensivamente estudada, o interesse emergente tem surgido na modelagem de séries temporais de alta dimensão cujas características do mercado acionário e das decisões da vida real frequentemente envolvem múltiplos fatores ou variáveis inter-relacionadas.<br>
+<div style="text-indent: 2em;">Nessa direção, o objetivo dessa pesquisa é propor um método de previsão temporal multivariada da direção dos valores de retorno de 10 ações em diversos setores negociadas na B3 180 dias à frente. Utilizou-se do modelo ARIMA $(p, d, q)$ em que $p$ denota os números dos termos autorregressivos, $d$ o número de vezes que a série deve ser diferenciada antes de tornar-se estacionária e $q$ o número de termos de média móvel, e assumindo a existência de incerteza, desenvolve-se esforços para reduzir os erros inerentes à previsão. Outrossim faz-se a descrição das propriedades da série, tais como tendência, sazonalidade/ciclo, aleatoriedade e a existência de valores discrepantes a fim de melhor interpretação dos padrões extraídos pelo modelo.<br>
+<div style="text-indent: 2em;">Cabe reforçar que evoluções nesses estudos proporcionam ganhos significativos para a sociedade com o objetivo de prever os mercados financeiros a fim de  fornecer sistemas de suporte para o investidor tomar melhores decisões. Ainda, a depender da complexidade do contexto a se estudar, métodos de inteligência artificial e técnicas variadas podem ser aplicadas em inúmeros domínios científicos que envolvam processos estocásticos. Contudo a econometria tem-se mostrado uma área importante na pesquisa de algoritmos eficientes devido a sua completude e dinamicidade em séries temporais eliminando a mística que cerca os métodos de análise das expectativas de rendimento e apresentando técnicas robustas e eficientes capazes de inferir a dependência estocástica entre passado e futuro [Bontempi et al. 2013], [Bueno 2018].<br>
+</div style="text-indent: 2em;">
+
+<div style="text-align: justify">
+# <br>2. Metodologia
+<br>Para aplicação do modelo ARIMA, utiliza-se a série histórica dos preços de fechamento diário de dez ações de empresas de capital aberto de $XXXXXX$ setores econômicos distintos, disponíveis on-line no site Yahoo Finance. Essas empresas fazem parte do índice Bovespa, que mede o desempenho dos ativos de maior representatividade do mercado brasileiro e que se destacam pela eficiência de mercado (alcançada quando a alocação dos recursos maximiza o excedente total) e liquidez. O horizonte de previsão contemplou o período de 1º/Jan/2016 a 30/Dez/2020 consistindo em 1.254 dias de negociações.<br>
+
+<div style="text-indent: 2em;">A Figura 1 ilustra as principais etapas da metodologia adotada, as quais são detalhadas na sequência.<br><br>
+```{r pressure, echo=FALSE, fig.cap="**Figura 1. Etapas metodológicas adotadas. Fonte: Autoria própria, 2021.**", out.width = '85%'}
+knitr::include_graphics("C:/Users/CLIENTE/Documents/ITA/PO/AULAS/ECONOMETRIA/Trabalho/Imagens/Metodologia.png")
+```
+<br>
+
+
+# 3. Referências correlatas<br>
+
+# 4. Estimação do modelo<br>
+
+# 5. Resultados e discussões<br>
+
+# 6. Conclusão<br>
+
+# 7. Referências<br>
+- WOOLDRIDGE, J. M. (2019). Introdução à econometria: uma abordagem moderna. Tradução da 6ª edição norte-americana. Cengage Learning, SP.<br>
+- BOX, G. E. P. & JENKINS, G. M. (1976). Time series analysis, forecasting and control. Revised Edition. Holden-Day, 1976. 575 p. Oaklan, California.<br>
+- CHAKRABORTY, S. & RAY, T. (2006). Bank-based versus market-based financial systems: a growth-theoretic analysis. Journal of Monetary Economics. Vol. 53, Nº 2, March 2006, pp. 329-350, Elsevier DOI: https://doi.org/10.1016/j.jmoneco.2005.01.003.<br>
+- NAIK, P. K. & PADHI, P. (2015). On the linkage between stock market development and economic growth in emerging market economies: Dynamic panel evidence Review of Accounting and Finance, Vol. 14, Nº 4, 2015, pp. 363-381, © Emerald Group Publishing Limited 1475-7702 DOI: http://dx.doi.org/10.1108/RAF-09-2014-0105.<br>
+- DIEBOLD, F. X. (1998). The Past, Present, and Future of Macroeconomic Forecasting. Journal of Economic Perspectives. Volume 12, Number 2, Spring 1998, Pages 175-192. DOI: 10.1257 / jep.12.2.175.<br>
+- BONTEMPI, G., TAIEB, S. B., & LE BORGNE, Y-A. (2013). Machine learning strategies for time series forecasting. In European business intelligence summer school, pages 62-77. Springer. DOI: https://doi.org/10.1007/978-3-642-36318-4_3.<br>
+- HAMILTON, J. D. (1994). Time Series Analysis. Princeton University Press, Princeton, New Jersey.<br>
+- BUENO, R. L. S. (2018). Econometria de Séries Temporais. Cengage Learning.<br>
+- DICKEY, D. & FULLER, W. (1979), Distribution of the estimators for autoregressive time series with a unit root. Journal of the American Statistical Association 74(366), 427-431.<br>
+- TSAY, R. S. (2014). Multivariate Time Series Analysis: with R and Financial Application. Wiley Series in Probability and Statistics, Booth School of Business, University of Chicago, Chicago, IL.<br>
+- LINTON, O., TODOROV, V. & ZHANG, Z. (2021). Editorial for the special issue on financial econometrics in the age of the digital economy. Journal of Econometrics. Volume 222, Issue 1, Part B, May 2021, Pages 265-268. DOI: doi.org/10.1016/J.JECONOM.2020.07.001.<br>
+- CHEN, R., XIAO, H. & YANG, D. (2021). Autoregressive models for matrix-valued time series. Journal of Econometrics. Volume 222, Issue 1, Part B, May 2021, Pages 539-560. DOI: https://doi.org/10.1016/j.jeconom.2020.07.015.<br>
+- LIN, C.-S., CHIU, S.-H. & LIN, T.-Y. (2012). Empirical mode decomposition–based least squares support vector regression for foreign exchange rate forecasting. Economic Modelling, 29(6):2583–2590.<br>
+- ENDERS, W. (1948). Applied econometric time series – Fourth edition. University of Alabama.<br>
+- CAVALCANTE, R. C., BRASILEIRO, R. C., SOUZA, V. L. F, NOBREGA, J. P. & OLIVEIRA, A. L. I. (2016). Computational Intelligence Finalcial Markets: A survey and Future Direcions. Expert Systems with Applications. Volume 55, 15 de agosto de 2016 , páginas 194-211. DOI: https://doi.org/10.1016/j.eswa.2016.02.006.<br>
+- MORETTIN, P. A. (2017). Econometria ﬁnanceira: um curso em séries temporais ﬁnanceiras. Editora Blucher.<br>
+- ANGRIST, J. D. & PISCHKE, J-S. (2015). Mastering’ Metrics: the path from to cause to effect. Princeton University Press.<br>
+- GUJARATI, D. N. & PORTER, D. C. (2011). Econometria básica. Quinta edição. MC Graw Hill, AMGH Editora, SP.<br>
+
+
+
